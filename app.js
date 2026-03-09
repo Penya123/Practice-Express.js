@@ -23,7 +23,7 @@ app.post("/productos", (req, res) => {
     if(!precio || precio <= 0)
         return res.status(400).json({error: "El precio es invalido"});
 
-    const nuevoProducto= {
+    const nuevoProducto = {
         id: productos.length + 1,
         nombre,
         precio
@@ -32,6 +32,30 @@ app.post("/productos", (req, res) => {
     productos.push(nuevoProducto);
     res.status(200).json(nuevoProducto);
 })
+
+app.put("/productos/:id", (req, res) => {
+    const idBuscar = parseInt(req.params.id);
+    const {nombre, precio} = req.body;
+
+    const indice = productos.findIndex(p => p.id === idBuscar);
+
+    if(indice === -1){
+        return res.status(404).json({error: "No se encontró el producto"});
+    }
+
+    if(!nombre || typeof(nombre) !== "string")
+        return res.status(400).json({error: "El nombre es invalido"});
+    
+    if(!precio || precio <= 0)
+        return res.status(400).json({error: "El precio es invalido"});
+
+    productos[indice] = {
+        id: idBuscar,
+        nombre,
+        precio
+    }
+    return res.status(200).json(productos[indice])
+});
 
 
 app.listen(PORT, () => {
