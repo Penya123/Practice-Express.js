@@ -57,6 +57,17 @@ app.put("/productos/:id", (req, res) => {
     return res.status(200).json(productos[indice])
 });
 
+app.delete("/productos/:id", (req, res) => {
+    const idBuscar = parseInt(req.params.id);
+    const indice = productos.findIndex(p => p.id === idBuscar);
+
+    if(indice === -1)
+        return res.status(404).json({error: "No se encontró el producto"});
+
+    productos.splice(indice, 1);
+    return res.status(200).json({estado: "Se borro con exito"});
+});
+
 
 app.listen(PORT, () => {
     console.log('Servidor activo en http://localhost:' + PORT)
